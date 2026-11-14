@@ -1,0 +1,91 @@
+{
+  "observations": [
+    {
+      "path": "00_pre.tif",
+      "phase": "pre",
+      "date": "",
+      "looks": 4.0,
+      "band": 1
+    },
+    {
+      "path": "01_pre.tif",
+      "phase": "pre",
+      "date": "",
+      "looks": 4.0,
+      "band": 1
+    },
+    {
+      "path": "02_pre.tif",
+      "phase": "pre",
+      "date": "",
+      "looks": 4.0,
+      "band": 1
+    },
+    {
+      "path": "03_pre.tif",
+      "phase": "pre",
+      "date": "",
+      "looks": 4.0,
+      "band": 1
+    },
+    {
+      "path": "04_pre.tif",
+      "phase": "pre",
+      "date": "",
+      "looks": 4.0,
+      "band": 1
+    },
+    {
+      "path": "05_event.tif",
+      "phase": "event",
+      "date": "",
+      "looks": 4.0,
+      "band": 1
+    },
+    {
+      "path": "06_post.tif",
+      "phase": "post",
+      "date": "",
+      "looks": 4.0,
+      "band": 1
+    },
+    {
+      "path": "07_post.tif",
+      "phase": "post",
+      "date": "",
+      "looks": 4.0,
+      "band": 1
+    },
+    {
+      "path": "08_post.tif",
+      "phase": "post",
+      "date": "",
+      "looks": 4.0,
+      "band": 1
+    },
+    {
+      "path": "09_post.tif",
+      "phase": "post",
+      "date": "",
+      "looks": 4.0,
+      "band": 1
+    },
+    {
+      "path": "10_post.tif",
+      "phase": "post",
+      "date": "",
+      "looks": 4.0,
+      "band": 1
+    }
+  ],
+  "time_mode": "index",
+  "interruption": 5,
+  "evaluation_time": 10,
+  "expected": {
+    "b0": 0.65,
+    "b1": -0.01,
+    "b2": -0.2,
+    "b3": 0.035,
+    "net_effect": -0.025
+  }
+}
