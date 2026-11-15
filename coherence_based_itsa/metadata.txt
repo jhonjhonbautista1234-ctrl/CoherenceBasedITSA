@@ -4,14 +4,15 @@ qgisMinimumVersion=3.22
 qgisMaximumVersion=4.99
 description=Segmented interrupted time series analysis of SAR coherence raster stacks.
 about=Fits per-pixel segmented OLS to coherence magnitudes with optional Newey-West errors and expectation-inversion bias correction. Requires NumPy, SciPy, GDAL and matplotlib in the QGIS Python environment. Intended for Windows, Linux and macOS; no geographic restriction. Coherence changes do not establish physical recovery. See README for inference and coherence-estimation limitations.
-version=1.0.0
+version=1.1.0
 author=Allen John T. Bautista
 email=Jhonjhonbautista1234@gmail.com
 homepage=https://github.com/jhonjhonbautista1234-ctrl/CoherenceBasedITSA
 tracker=https://github.com/jhonjhonbautista1234-ctrl/CoherenceBasedITSA/issues
 repository=https://github.com/jhonjhonbautista1234-ctrl/CoherenceBasedITSA
 license=GPL-2.0-or-later
-changelog=1.0.0 - Initial release with segmented OLS, optional Newey-West inference, coherence bias correction, raster and series exports.
+changelog=1.1.0 - Works on real SNAP coherence exports: automatic grid alignment, zero fill treated as no data, phase and dates read from file names, AOI cropping, faster fitting. New recovery class raster, styled layers, recovery map figures, redesigned ITSA graphs and plain CSV tables. Single input table in the dialog.
+    1.0.0 - Initial release with segmented OLS, optional Newey-West inference, coherence bias correction, raster and series exports.
 icon=icon.png
 tags=SAR,coherence,time series,interrupted time series,remote sensing
 experimental=False

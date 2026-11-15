@@ -50,17 +50,26 @@ class CoherenceBasedItsa:
         self.dialog.activateWindow()
 
     def load_result(self, result):
+        # The two recovery maps go on top and open styled (.qml beside each raster);
+        # the remaining model rasters are grouped and switched off.
         project = QgsProject.instance()
-        group = project.layerTreeRoot().addGroup(Path(result.folder).name)
+        group = project.layerTreeRoot().insertGroup(0, Path(result.folder).name)
+        details = group.addGroup("Model details")
+        details.setExpanded(False)
         for path in result.rasters:
-            layer = QgsRasterLayer(path, Path(path).stem)
-            if layer.isValid():
-                project.addMapLayer(layer, False)
-                node = group.addLayer(layer)
-                node.setItemVisibilityChecked(Path(path).stem == "recovery")
+            name = Path(path).stem
+            layer = QgsRasterLayer(path, name.replace("_", " "))
+            if not layer.isValid():
+                continue
+            project.addMapLayer(layer, False)
+            if name == "recovery":
+                group.insertLayer(0, layer)
+            elif name == "recovery_class":
+                group.insertLayer(1, layer).setItemVisibilityChecked(False)
+            else:
+                details.addLayer(layer).setItemVisibilityChecked(False)
         for path in result.tables:
-            uri = (QUrl.fromLocalFile(path).toString()
-                   + "?type=csv&skipLines=1&geomType=none&detectTypes=yes")
+            uri = QUrl.fromLocalFile(path).toString() + "?type=csv&geomType=none&detectTypes=yes"
             layer = QgsVectorLayer(uri, Path(path).stem, "delimitedtext")
             if layer.isValid():
                 project.addMapLayer(layer, False)

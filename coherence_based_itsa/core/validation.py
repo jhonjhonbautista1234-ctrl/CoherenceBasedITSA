@@ -25,6 +25,10 @@ def validate_options(options):
     if options.nodata >= 0:
         raise ValueError("Use negative output nodata outside the count "
                          "and p-value ranges.")
+    if not isinstance(options.class_tolerance, (int, float)) or not 0 <= options.class_tolerance < 1:
+        raise ValueError("Class tolerance must lie in [0,1).")
+    if not options.observations:
+        raise ValueError("Add coherence rasters first.")
     if options.low_threshold is not None and not 0 <= options.low_threshold <= 1:
         raise ValueError("Low-coherence threshold must lie in [0,1].")
     if not options.output_folder:
