@@ -14,7 +14,8 @@ try:
     POLYGONS, POINTS = Qgis.LayerFilter.PolygonLayer, Qgis.LayerFilter.PointLayer
 except (ImportError, AttributeError):
     from qgis.core import QgsMapLayerProxyModel
-    POLYGONS, POINTS = QgsMapLayerProxyModel.PolygonLayer, QgsMapLayerProxyModel.PointLayer
+    POLYGONS = QgsMapLayerProxyModel.Filter.PolygonLayer
+    POINTS = QgsMapLayerProxyModel.Filter.PointLayer
 
 VECTORS = "Vector files (*.gpkg *.shp *.kml *.kmz *.geojson *.json);;All files (*)"
 
@@ -61,9 +62,11 @@ class VectorInput(QWidget):
         path = directory / f"{label.lower().replace(' ', '_')}_{stamp}.gpkg"
         settings = QgsVectorFileWriter.SaveVectorOptions()
         settings.driverName = "GPKG"
+        # A source field called fid would clash with the GeoPackage key column.
+        settings.layerOptions = ["FID=itsa_fid"]
         settings.onlySelectedFeatures = self.selected.isChecked()
         error, message, *_ = QgsVectorFileWriter.writeAsVectorFormatV3(
             layer, str(path), QgsProject.instance().transformContext(), settings)
-        if error != QgsVectorFileWriter.NoError:
+        if error != QgsVectorFileWriter.WriterError.NoError:
             raise ValueError(f"Could not save the {label} layer: {message}")
         return str(path)

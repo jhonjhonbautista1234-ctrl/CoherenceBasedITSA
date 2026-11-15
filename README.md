@@ -8,7 +8,7 @@ GPL-2.0-or-later: GNU GPL version 2 or, at your option, any later version.
 ## Install
 
 In QGIS, open **Plugins > Manage and Install Plugins > Install from ZIP** and
-select `coherence_based_itsa-1.1.0.zip`. Enable **Coherence Based ITSA** and open
+select `coherence_based_itsa-1.1.1.zip`. Enable **Coherence Based ITSA** and open
 **Raster > Coherence Based ITSA**. The official Plugin Manager search will list
 the plugin after its submission to, and approval by, the QGIS repository.
 

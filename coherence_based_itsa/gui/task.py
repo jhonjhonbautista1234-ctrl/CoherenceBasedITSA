@@ -9,7 +9,7 @@ class AnalysisTask(QgsTask):
     message = pyqtSignal(str)
 
     def __init__(self, options, callback):
-        super().__init__("Coherence Based ITSA", QgsTask.CanCancel)
+        super().__init__("Coherence Based ITSA", QgsTask.Flag.CanCancel)
         self.options = options
         self.callback = callback
         self.result = None

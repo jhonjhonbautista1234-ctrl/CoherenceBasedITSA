@@ -76,7 +76,10 @@ def chronology(options):
     if mode == "dates":
         intervals = [_interval(o) for o in records]
         origin = min(i[0] for i in intervals)
-        days = lambda moment: (moment - origin).total_seconds() / 86400
+
+        def days(moment):
+            return (moment - origin).total_seconds() / 86400
+
         starts = np.array([days(i[0]) for i in intervals])
         ends = np.array([days(i[1]) for i in intervals])
         times = np.array([days(i[2]) for i in intervals])
