@@ -62,9 +62,16 @@ def fit_series(values, times, phases, fitted_post, t0, options):
     post_count = (valid & fitted_post[:, None]).sum(0)
     counts = valid.sum(0)
     x = design_matrix(times, fitted_post, t0)
-    patterns, memberships = np.unique(valid.T, axis=0, return_inverse=True)
-    for group, pattern in enumerate(patterns):
-        indices = np.flatnonzero(memberships == group)
+    # Group pixels by their pattern of valid observations; each group is one
+    # multi-right-hand-side least-squares solve.
+    if len(times) <= 62:
+        codes = (valid * (1 << np.arange(len(times), dtype=np.int64))[:, None]).sum(0)
+    else:
+        codes = np.unique(valid.T, axis=0, return_inverse=True)[1].ravel()
+    order = np.argsort(codes, kind="stable")
+    breaks = np.flatnonzero(np.diff(codes[order])) + 1
+    for indices in np.split(order, breaks):
+        pattern = valid[:, indices[0]]
         if ((pattern & pre).sum() < options.min_pre
                 or (pattern & fitted_post).sum() < options.min_post):
             continue
@@ -77,14 +84,14 @@ def fit_series(values, times, phases, fitted_post, t0, options):
             continue
         transform = np.array([[1, -t0 / scale, 0, 0], [0, 1 / scale, 0, 0],
                               [0, 0, 1, 0], [0, 0, 0, 1 / scale]])
-        b = np.linalg.lstsq(centered, y[pattern][:, indices], rcond=None)[0]
+        observed = y[np.ix_(pattern, indices)]
+        b = np.linalg.pinv(centered) @ observed
         result = transform @ b
         beta[:, indices] = result
         predictions[:, indices] = x @ result
-        residual = y[pattern][:, indices] - centered @ b
+        residual = observed - centered @ b
         sse = np.sum(residual ** 2, axis=0)
-        total = np.sum((y[pattern][:, indices]
-                        - y[pattern][:, indices].mean(0)) ** 2, axis=0)
+        total = np.sum((observed - observed.mean(0)) ** 2, axis=0)
         r2[indices] = np.divide(total - sse, total,
                                 out=np.full_like(sse, np.nan), where=total > 0)
         if len(a) > 2:

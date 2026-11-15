@@ -146,7 +146,7 @@ class TimingTests(unittest.TestCase):
         observations = [Observation(str(i), p) for i, p in enumerate(
             ["pre", "pre", "event", "post", "post"])]
         options = Options(observations, ".")
-        self.assertEqual(chronology(options)[3], 2)
+        self.assertEqual(chronology(options).t0, 2)
         options.observations = observations[:3]
         with self.assertRaises(ValueError):
             chronology(options)

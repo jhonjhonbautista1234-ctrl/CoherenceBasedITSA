@@ -24,8 +24,7 @@ def start():
         import coherence_based_itsa
         sample = Path(coherence_based_itsa.__file__).parent / "sample"
         for path in sorted(sample.glob("*.tif")):
-            phase = path.stem.split("_")[1]
-            dialog.groups[phase].append(str(path))
+            dialog.inputs.append(str(path))
         dialog.output.setText(str(root / "tmp" / "gui_outputs"))
         dialog.options.fields["block_size"].setValue(2)
         dialog.start()
@@ -40,7 +39,7 @@ def finish():
         QTimer.singleShot(250, finish)
         return
     layers = QgsProject.instance().mapLayers()
-    state_path.write_text(json.dumps(dict(status="passed" if len(layers) == 16 else "failed",
+    state_path.write_text(json.dumps(dict(status="passed" if len(layers) == 18 else "failed",
                                           layers=len(layers), message=plugin.dialog.status.text())),
                           encoding="utf-8")
     if plugin.results:

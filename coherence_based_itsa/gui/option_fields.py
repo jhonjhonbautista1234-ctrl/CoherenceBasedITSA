@@ -7,32 +7,39 @@ from qgis.PyQt.QtWidgets import (QCheckBox, QComboBox, QFormLayout, QLineEdit,
 from ..core.options import Options
 
 CHOICES = {
-    "time_mode": [("Order index (dates blank)", "index"), ("Acquisition dates", "dates")],
+    "time_mode": [("Automatic (dates when every raster has one)", "auto"),
+                  ("Acquisition dates", "dates"), ("Order index", "index")],
     "metric": [("Net effect vs pre counterfactual", "net_effect"), ("Slope change", "slope_change")],
     "covariance": [("Classical OLS", "ols"), ("Newey-West", "newey_west")],
     "bias": [("None", "none"), ("Expectation inversion", "expectation_inversion")],
     "resampling": [(v.capitalize(), v) for v in ("nearest", "bilinear", "cubic", "average")],
 }
 LABELS = {
-    "time_mode": "Time coordinate", "interruption": "Interruption T0 (blank = automatic)",
-    "include_event": "Include event-straddling observations in Post fit",
-    "metric": "Recovery map metric", "evaluation_time": "Evaluation k (blank = last observation)",
-    "min_pre": "Minimum valid Pre observations", "min_post": "Minimum valid Post observations",
+    "title": "Figure title (optional)",
+    "time_mode": "Time coordinate",
+    "interruption": "Interruption T0, days from first date (blank = auto)",
+    "evaluation_time": "Evaluation time k, days (blank = last date)",
+    "include_event": "Fit event-straddling rasters as POST",
+    "metric": "Recovery map metric",
+    "class_tolerance": "Recovery class tolerance (coherence units)",
+    "zero_is_nodata": "Treat exact 0 as no data (SNAP fill)",
+    "resample": "Align mismatched grids to the first raster",
+    "resampling": "Alignment resampling method",
+    "min_pre": "Minimum valid PRE observations per pixel",
+    "min_post": "Minimum valid POST observations per pixel",
     "covariance": "Standard errors", "nw_lags": "Newey-West maximum lag",
-    "bias": "Coherence bias correction", "lookup_points": "Lookup table points",
+    "bias": "Coherence bias correction", "lookup_points": "Bias lookup table points",
     "low_threshold": "Low-coherence threshold (blank = off)",
-    "resample": "Explicitly resample mismatched grids to first Pre grid",
-    "resampling": "Resampling method", "block_size": "Block side (pixels)",
-    "nodata": "Output nodata", "histogram_bins": "Histogram bins", "dpi": "PNG DPI",
-    "aoi_path": "AOI polygon file (blank = full extent)",
-    "features_path": "Point/polygon file for feature series (optional)",
     "all_touched": "Include all polygon-touched pixels",
+    "block_size": "Block side (pixels)", "nodata": "Output nodata",
+    "histogram_bins": "Histogram bins", "dpi": "Figure DPI",
     "pixel_csv": "Export per-pixel coefficient CSV", "pixel_step": "Pixel sampling step",
     "pixel_cap": "Maximum pixel CSV rows",
 }
 INTEGER_MIN = {"min_pre": 2, "min_post": 2, "nw_lags": 0, "lookup_points": 16,
                "block_size": 1, "histogram_bins": 1, "dpi": 50, "pixel_step": 1, "pixel_cap": 1}
 OPTIONAL_FLOAT = {"interruption", "evaluation_time", "low_threshold"}
+FLOAT = {"nodata", "class_tolerance"}
 
 
 class OptionFields(QScrollArea):
@@ -76,7 +83,7 @@ class OptionFields(QScrollArea):
                 values[name] = widget.value()
             elif name in OPTIONAL_FLOAT:
                 values[name] = float(widget.text()) if widget.text().strip() else None
-            elif name == "nodata":
+            elif name in FLOAT:
                 values[name] = float(widget.text())
             else:
                 values[name] = widget.text().strip()

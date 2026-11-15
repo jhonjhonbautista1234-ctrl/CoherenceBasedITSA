@@ -19,7 +19,7 @@ command = [str(executable), "--profiles-path", str(profiles), "--profile", profi
 if args.smoke:
     destination = profiles / "profiles" / profile / "python" / "plugins"
     destination.mkdir(parents=True, exist_ok=True)
-    with zipfile.ZipFile(root / "dist" / "coherence_based_itsa-1.0.0.zip") as archive:
+    with zipfile.ZipFile(max((root / "dist").glob("coherence_based_itsa-*.zip"))) as archive:
         assert all(name.startswith("coherence_based_itsa/") and ".." not in name.split("/")
                    for name in archive.namelist())
         archive.extractall(destination)
