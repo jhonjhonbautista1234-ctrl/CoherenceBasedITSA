@@ -1,6 +1,6 @@
 # Verification record
 
-Checks actually performed for Coherence Based ITSA 1.1.1. Anything not listed
+Checks actually performed for Coherence Based ITSA 1.1.2. Anything not listed
 here has not been tested.
 
 ## Environment

@@ -8,7 +8,7 @@ GPL-2.0-or-later: GNU GPL version 2 or, at your option, any later version.
 ## Install
 
 In QGIS, open **Plugins > Manage and Install Plugins > Install from ZIP** and
-select `coherence_based_itsa-1.1.1.zip`. Enable **Coherence Based ITSA** and open
+select `coherence_based_itsa-1.1.2.zip`. Enable **Coherence Based ITSA** and open
 **Raster > Coherence Based ITSA**. The official Plugin Manager search will list
 the plugin after its submission to, and approval by, the QGIS repository.
 
@@ -219,14 +219,23 @@ then keeps up to the row cap in block order, so it is deterministic.
 ## Processing and example
 
 The provider registers `coherence_itsa:coherence_itsa` in the Processing toolbox
-for batch runs and models. Supply Pre/Event/Post raster lists, a JSON observation
-settings array, an analysis-options JSON object and an output parent folder.
-All engine options are available through that object; the dialog exposes the
-same settings. Observation settings, if nonempty, must contain one object per
-raster in Pre/Event/Post order, for example
-`{"date":"2022-01-01","end_date":"2022-01-13","looks":4,"band":1}`.
-The default empty array reads the dates from the file names and uses L=4, band 1.
-An optional study-area polygon layer can be supplied.
+for batch runs and models. Select all Pre, Event and Post rasters (at least two
+Pre and two Post), optionally a study-area polygon layer, and an output folder.
+If the output folder is left on its default, the run is saved to a temporary
+folder. After a toolbox run the recovery map and the recovery classes are added
+to the project and the graphs open in a results window; the log lists every
+table and figure.
+
+Two advanced parameters are folded away under **Advanced parameters**:
+
+- **Per-raster overrides** stays `[]` in normal use: dates are read from the file
+  names, with L=4 and band 1. To override, give one object per raster in
+  Pre/Event/Post order, for example
+  `[{"date":"2022-01-01","end_date":"2022-01-13","looks":4,"band":1}, {}, {}, {}]`,
+  where `{}` keeps the automatic values of that raster. It does not take
+  thresholds or other numbers.
+- **Analysis options** is a JSON object holding every engine option, such as
+  `class_tolerance`; the dialog exposes the same settings.
 
 The `sample/` folder contains eleven 5x4 synthetic GeoTIFFs, under 1 MB total.
 Use **Add folder...** on it: `00_pre` through `04_pre` are recognised as PRE,

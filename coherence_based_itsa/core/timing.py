@@ -87,9 +87,15 @@ def chronology(options):
         origin = None
         times = np.arange(len(records), dtype=float)
         starts = ends = times
-    if len(times) < 4 or np.any(np.diff(times) <= 0):
-        raise ValueError("Supply at least four rasters with distinct dates, in time order.")
     pre, event, post = phases == "pre", phases == "event", phases == "post"
+    if len(times) < 4:
+        raise ValueError(
+            f"Only {len(times)} raster(s) were given ({int(pre.sum())} PRE, "
+            f"{int(event.sum())} event, {int(post.sum())} POST). The model needs at least "
+            f"{options.min_pre} PRE and {options.min_post} POST rasters; select all the "
+            "rasters of each phase.")
+    if np.any(np.diff(times) <= 0):
+        raise ValueError("The rasters must have distinct dates and be in time order.")
     fitted_post = post | (event & options.include_event)
     if pre.sum() < options.min_pre or fitted_post.sum() < options.min_post:
         raise ValueError(f"Need at least {options.min_pre} PRE and {options.min_post} POST "

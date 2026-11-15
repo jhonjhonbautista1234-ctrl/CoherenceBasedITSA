@@ -11,7 +11,7 @@ except ImportError:
     from qgis.PyQt.QtWidgets import QAction
 from qgis.core import QgsApplication, QgsProject, QgsRasterLayer, QgsVectorLayer
 
-from .processing import ItsaProvider
+from .processing import ItsaAlgorithm, ItsaProvider
 
 
 class CoherenceBasedItsa:
@@ -28,6 +28,7 @@ class CoherenceBasedItsa:
         self.action.triggered.connect(self.show_dialog)
         self.iface.addPluginToRasterMenu("Coherence Based ITSA", self.action)
         self.provider = ItsaProvider()
+        ItsaAlgorithm.viewer = self.show_results
         QgsApplication.processingRegistry().addProvider(self.provider)
 
     def unload(self):
@@ -40,6 +41,7 @@ class CoherenceBasedItsa:
         if self.provider:
             QgsApplication.processingRegistry().removeProvider(self.provider)
             self.provider = None
+        ItsaAlgorithm.viewer = None
 
     def show_dialog(self):
         if self.dialog is None:
@@ -74,6 +76,9 @@ class CoherenceBasedItsa:
             if layer.isValid():
                 project.addMapLayer(layer, False)
                 group.addLayer(layer)
+        self.show_results(result)
+
+    def show_results(self, result):
         from .gui.results import ResultsDialog
         viewer = ResultsDialog(result, self.iface.mainWindow())
         self.results.append(viewer)
