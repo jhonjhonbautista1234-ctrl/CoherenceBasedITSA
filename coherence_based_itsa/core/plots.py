@@ -61,8 +61,13 @@ def series_graph(path, scope, series, q25, q75, fit, timeline, options, pixels):
     shift = mdates.date2num(timeline.origin) if dated else 0.0
     b = fit.beta[:, 0]
     fitted = bool(np.isfinite(b).all())
-    pre_line = lambda t: b[0] + b[1] * t
-    post_line = lambda t: b[0] + b[1] * t + b[2] + b[3] * (t - t0)
+
+    def pre_line(t):
+        return b[0] + b[1] * t
+
+    def post_line(t):
+        return b[0] + b[1] * t + b[2] + b[3] * (t - t0)
+
     with PLOT_LOCK:
         figure = new_figure(10, 6.2)
         axis = figure.add_axes([0.08, 0.30, 0.78, 0.53])

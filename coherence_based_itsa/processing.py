@@ -18,7 +18,8 @@ try:
     RASTER = Qgis.ProcessingSourceType.Raster
     POLYGON = Qgis.ProcessingSourceType.VectorPolygon
 except (ImportError, AttributeError):
-    RASTER, POLYGON = QgsProcessing.TypeRaster, QgsProcessing.TypeVectorPolygon
+    RASTER = QgsProcessing.SourceType.TypeRaster
+    POLYGON = QgsProcessing.SourceType.TypeVectorPolygon
 
 
 class ItsaAlgorithm(QgsProcessingAlgorithm):
